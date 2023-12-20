@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryControllerView;
+use App\Http\Controllers\ChartsController;
 use App\Http\Controllers\ContactControllerView;
 use App\Http\Controllers\InformationControllerView;
 use App\Http\Controllers\ProductControllerView;
@@ -22,14 +23,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // Check if the "token" cookie exists
-    // if (request()->cookie('token')) {
-        // Redirect to the home page if the token exists
-        return view('welcome');
-    // } else {
+    // Check if the "access_token" cookie exists
+    if (!request()->cookie('access_token')) {
         // Redirect to the login page if the token doesn't exist
-        // return redirect('/login');
-    // }
+        return redirect('/login');
+    }
+
+    // Proceed to the home page if the token exists
+    return view('home');
 });
 
 Route::get('/login', function () {
@@ -114,3 +115,7 @@ Route::get('/products', [ProductControllerView::class, 'getAllProducts'])->name(
 Route::delete('/products/{id}',  [ProductControllerView::class, 'deleteProductById'])->name('products.delete');
 Route::get('/products/edit/{id}', [ProductControllerView::class, 'getProductById'])->name('products.getbyid');
 Route::patch('/products/edit/{id}', [ProductControllerView::class, 'updateProductById'])->name('products.update');
+
+// *********** Charts VIEWS *************************
+Route::get('/', [ChartsController::class, 'multipleCharts'])->name('home');
+
